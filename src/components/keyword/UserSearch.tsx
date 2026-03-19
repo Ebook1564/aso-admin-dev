@@ -4,11 +4,12 @@ import { Search, User } from "lucide-react";
 
 interface UserSearchResult {
   username: string;
-  count: number;
+  useremail: string;
+  delivery_count: number;
 }
 
 interface UserSearchProps {
-  onSelectUser: (user: Record<string, unknown>) => void;
+  onSelectUser: (user: UserSearchResult) => void;
 }
 
 const UserSearch: React.FC<UserSearchProps> = ({ onSelectUser }) => {
@@ -76,7 +77,7 @@ const UserSearch: React.FC<UserSearchProps> = ({ onSelectUser }) => {
 
       {isOpen && results.length > 0 && (
         <div className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-          {results.map((user: Record<string, unknown>, idx) => (
+          {results.map((user: UserSearchResult, idx) => (
             <button
               key={idx}
               onClick={() => {

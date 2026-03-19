@@ -60,9 +60,10 @@ export default function RecentOrders() {
           setUsers(json.data as User[]);
         } else {
           setError(json.error || "API returned error");
+          setSelectedUser(json.data);
         }
       } catch {
-        setError("Failed to fetch users");
+        setError("Failed to fetch details");
       } finally {
         setLoading(false);
       }

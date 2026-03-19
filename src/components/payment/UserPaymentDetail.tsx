@@ -19,6 +19,11 @@ interface UserPaymentDetailProps {
   onStatusUpdate?: (newStatus: string) => void;
 }
 
+interface JSPDFWithAutoTable {
+  autoTable: (options: Record<string, unknown>) => void;
+  lastAutoTable?: { finalY: number };
+}
+
 export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPaymentDetailProps) {
   const [status, setStatus] = useState(payment.payment_status || "PENDING");
   const [isUpdating, setIsUpdating] = useState(false);
@@ -72,7 +77,7 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
         ["Phone Number", payment.phonenumber || "N/A"],
         ["Country", payment.country || "N/A"],
       ];
-      (doc as unknown as Record<string, any>).autoTable({
+      (doc as unknown as JSPDFWithAutoTable).autoTable({
         startY: 55,
         head: [["Field", "Information"]],
         body: customerData,
@@ -85,8 +90,9 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
          ["Amount Paid", `$${parseFloat(payment.amount).toFixed(2)}`],
          ["Payment Status", status.toUpperCase()],
       ];
-      const lastY = (doc as unknown as Record<string, any>).lastAutoTable ? (doc as unknown as Record<string, any>).lastAutoTable.finalY + 10 : 70;
-      (doc as unknown as Record<string, any>).autoTable({
+      const docWithTable = doc as unknown as JSPDFWithAutoTable;
+      const lastY = docWithTable.lastAutoTable ? docWithTable.lastAutoTable.finalY + 10 : 70;
+      docWithTable.autoTable({
         startY: lastY,
         head: [["Payment Details", "Value"]],
         body: paymentData,
@@ -97,7 +103,7 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
       });
       doc.setFontSize(10);
       doc.setTextColor(150);
-      const finalY = (doc as unknown as Record<string, any>).lastAutoTable ? (doc as unknown as Record<string, any>).lastAutoTable.finalY : 150;
+      const finalY = docWithTable.lastAutoTable ? docWithTable.lastAutoTable.finalY : 150;
       doc.text("Thank you for your business!", 105, finalY + 20, { align: 'center' });
       doc.save(`Receipt_${payment.transactionid}.pdf`);
     } catch (err) {
@@ -412,13 +418,15 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
       >
          <div className="flex flex-col items-center gap-6">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-h-[80vh]">
-              <Image 
-                src={payment.screenshot_url} 
-                alt="Payment Proof Full View"
-                width={800}
-                height={600}
-                className="max-w-full max-h-full object-contain" 
-              />
+              {payment.screenshot_url && (
+                <Image 
+                  src={payment.screenshot_url} 
+                  alt="Payment Proof Full View"
+                  width={800}
+                  height={600}
+                  className="max-w-full max-h-full object-contain" 
+                />
+              )}
             </div>
             <button 
                onClick={() => setIsLightboxOpen(false)}

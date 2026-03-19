@@ -2,12 +2,28 @@
 import React, { useState, useEffect } from "react";
 import { ShieldCheck, Mail, Calendar, DollarSign, FileText, Package, Download } from "lucide-react";
 
+interface UserProfile {
+  username: string;
+  useremail?: string;
+  phonenumber?: string;
+  user_id?: string;
+  [key: string]: unknown;
+}
+
 interface UserDetailPanelProps {
-  user: Record<string, any>;
+  user: UserProfile;
+}
+
+interface DeliveryItem {
+  created_at: string;
+  payment_amount: number;
+  transaction_id: string;
+  keyword_upload: string;
+  [key: string]: unknown;
 }
 
 const UserDetailPanel: React.FC<UserDetailPanelProps> = ({ user }) => {
-  const [deliveries, setDeliveries] = useState<Record<string, any>[]>([]);
+  const [deliveries, setDeliveries] = useState<DeliveryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

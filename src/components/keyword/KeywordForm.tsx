@@ -9,11 +9,10 @@ interface KeywordFormProps {
   onAddKeyword: (keyword: string, payment?: Record<string, unknown>) => void;
   onUploadKeywords: (keywords: string[]) => void;
   onUploadPDF?: (file: File, paymentId: string) => void;
-  onSelectUser: (user: Record<string, unknown>) => void;
   onPaymentChange: (p: Record<string, unknown> | null) => void;
 }
 
-export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPDF, onSelectUser, onPaymentChange }: KeywordFormProps) {
+export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPDF, onPaymentChange }: KeywordFormProps) {
   const [searchPayment, setSearchPayment] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [payments, setPayments] = useState<Record<string, unknown>[]>([]);
