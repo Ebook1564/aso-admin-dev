@@ -4,8 +4,9 @@ import React from "react";
 import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import ActiveUsersCard from "@/components/ecommerce/ActiveUsersCard";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
+import KeywordReports from "@/components/user/KeywordReports";
+import CreatedUserDataTable from "@/components/tables/CreatedUserDataTable";
 // import DemographicCard from "@/components/ecommerce/DemographicCard";
 
 export const metadata: Metadata = {
@@ -16,37 +17,27 @@ export const metadata: Metadata = {
 
 export default function Ecommerce() {
   return (
-    <div className="grid grid-cols-12 gap-4 md:gap-6">
-      {/* Top Row - 3 Cards Full Width */}
-      <div className="col-span-12">
+    <div className="space-y-6">
+      {/* Metrics Section */}
+      <section>
         <EcommerceMetrics />
-      </div>
+      </section>
 
-      {/* Second Row - Monthly Sales Chart (Expanded) and Active Users Card (Matching Top Cards) */}
-      <div className="col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
-        <div className="lg:col-span-8">
+      {/* Main Analytics Section */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-7 xl:col-span-8">
           <MonthlySalesChart />
         </div>
-        <div className="lg:col-span-4">
-          <ActiveUsersCard />
+        
+        <div className="lg:col-span-5 xl:col-span-4">
+          <KeywordReports />
         </div>
-      </div>
+      </section>
 
-      {/* <div className="col-span-12 xl:col-span-5">
-        <MonthlyTarget />
-      </div> */}
-
-      <div className="col-span-12">
-        {/* <StatisticsChart /> */}
-      </div>
-
-      {/* <div className="col-span-12 xl:col-span-5">
-        <DemographicCard />
-      </div> */}
-
-      <div className="col-span-12 ">
-        <RecentOrders />
-      </div>
+      {/* User Data Section */}
+      <section>
+        <CreatedUserDataTable />
+      </section>
     </div>
   );
 }

@@ -279,200 +279,115 @@ export default function RecentOrders() {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 shadow-sm">
-      <div className="flex flex-col gap-4 mb-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-              Recent Logins
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Manage and view user information
-            </p>
+    <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] shadow-soft overflow-hidden">
+      <div className="px-5 py-6 sm:px-6">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                Recent Logins
+              </h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Detailed overview of recent user activity and management.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                onClick={handleExportCSV}
+                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/5 transition-all"
+                title="Export to CSV"
+              >
+                <DownloadIcon className="w-4 h-4" />
+                Export CSV
+              </button>
+              <button
+                onClick={() => setShowSearch(!showSearch)}
+                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium shadow-sm transition-all ${showSearch
+                  ? "border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-400"
+                  : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/5"
+                  }`}
+              >
+                Search
+              </button>
+              <button
+                onClick={handleSeeAllClick}
+                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/5 transition-all"
+              >
+                See all
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
-            <button
-              onClick={handleExportCSV}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 transition-colors"
-              title="Export to CSV"
-            >
-              <DownloadIcon className="w-4 h-4" />
-              Export CSV
-            </button>
-            <button
-              onClick={() => setShowSearch(!showSearch)}
-              className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-theme-sm font-medium shadow-theme-xs transition-colors ${showSearch
-                ? "border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-500 dark:bg-brand-900/20 dark:text-brand-400"
-                : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-                }`}
-            >
-              Search
-            </button>
-            <button
-              onClick={handleSeeAllClick}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 transition-colors"
-            >
-              See all
-            </button>
-          </div>
-        </div>
-
-        {/* Quick Status Filter - Always Visible */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Status:</span>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setStatusFilter("all")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === "all"
-                ? "bg-brand-500 text-white shadow-sm"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                }`}
-            >
-              All ({users.length})
-            </button>
-            <button
-              onClick={() => setStatusFilter("interested")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === "interested"
-                ? "bg-blue-500 text-white shadow-sm"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                }`}
-            >
-              Interested ({users.filter(u => (u.status || "interested").toLowerCase() === "interested").length})
-            </button>
-            <button
-              onClick={() => setStatusFilter("ongoing")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === "ongoing"
-                ? "bg-green-500 text-white shadow-sm"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                }`}
-            >
-              Ongoing ({users.filter(u => (u.status || "interested").toLowerCase() === "ongoing").length})
-            </button>
-            <button
-              onClick={() => setStatusFilter("Hold")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === "Hold"
-                ? "bg-yellow-500 text-white shadow-sm"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                }`}
-            >
-              Hold ({users.filter(u => (u.status || "interested").toLowerCase() === "hold").length})
-            </button>
-            <button
-              onClick={() => setStatusFilter("Declined")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === "Declined"
-                ? "bg-red-500 text-white shadow-sm"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                }`}
-            >
-              Declined ({users.filter(u => (u.status || "interested").toLowerCase() === "declined").length})
-            </button>
+          <div className="flex items-center gap-2 flex-wrap border-t border-gray-100 dark:border-gray-800 pt-4">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mr-2">Status:</span>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setStatusFilter("all")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${statusFilter === "all"
+                  ? "bg-gray-900 text-white shadow-sm dark:bg-white dark:text-gray-900"
+                  : "bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200 dark:bg-gray-800/50 dark:text-gray-400 dark:hover:border-gray-700"
+                  }`}
+              >
+                All ({users.length})
+              </button>
+              {["Interested", "Ongoing", "Hold", "Declined"].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setStatusFilter(status)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${statusFilter === status
+                    ? "bg-brand-500 text-white shadow-sm"
+                    : "bg-gray-50 text-gray-600 border border-transparent hover:border-gray-200 dark:bg-gray-800/50 dark:text-gray-400 dark:hover:border-gray-700"
+                    }`}
+                >
+                  {status} ({users.filter(u => (u.status || "interested").toLowerCase() === status.toLowerCase()).length})
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Search Bar and Status Filter - Toggleable */}
       {showSearch && (
-        <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50">
-          <div className="space-y-4">
-            {/* Search Input */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search by username, email, country, phone, or URL..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-11 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 focus:border-brand-300 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:border-gray-700 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                autoFocus
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-lg"
-                  aria-label="Clear search"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            {/* Status Filter */}
-            <div>
-              <Label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">
-                Filter by Status
-              </Label>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => setStatusFilter("all")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${statusFilter === "all"
-                    ? "bg-brand-500 text-white shadow-sm"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                    }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setStatusFilter("interested")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${statusFilter === "interested"
-                    ? "bg-blue-500 text-white shadow-sm"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                    }`}
-                >
-                  Interested
-                </button>
-                <button
-                  onClick={() => setStatusFilter("ongoing")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${statusFilter === "ongoing"
-                    ? "bg-green-500 text-white shadow-sm"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                    }`}
-                >
-                  Ongoing
-                </button>
-                <button
-                  onClick={() => setStatusFilter("Hold")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${statusFilter === "Hold"
-                    ? "bg-yellow-500 text-white shadow-sm"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                    }`}
-                >
-                  Hold
-                </button>
-                <button
-                  onClick={() => setStatusFilter("Declined")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${statusFilter === "Declined"
-                    ? "bg-red-500 text-white shadow-sm"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
-                    }`}
-                >
-                  Declined
-                </button>
-              </div>
-            </div>
+        <div className="px-5 pb-6 sm:px-6">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Filter users by name, email, or country..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-12 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm shadow-inner placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder:text-gray-500"
+              autoFocus
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
       )}
 
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
+      <div className="max-w-full overflow-x-auto border-t border-gray-100 dark:border-gray-800">
         <Table>
-          <TableHeader className="border-gray-100 dark:border-gray-800 border-y bg-gray-50 dark:bg-gray-800/50">
+          <TableHeader className="bg-gray-50/50 dark:bg-gray-800/20">
             <TableRow>
-              <TableCell isHeader className="px-5 py-3.5 font-semibold text-gray-600 text-start text-xs uppercase tracking-wider dark:text-gray-400">
-                S.No
+              <TableCell isHeader className="px-5 py-4 font-bold text-gray-400 text-start text-[10px] uppercase tracking-widest dark:text-gray-500">
+                User Profile
               </TableCell>
-              <TableCell isHeader className="px-5 py-3.5 font-semibold text-gray-600 text-start text-xs uppercase tracking-wider dark:text-gray-400">
-                User Information
+              <TableCell isHeader className="px-5 py-4 font-bold text-gray-400 text-start text-[10px] uppercase tracking-widest dark:text-gray-500">
+                Contact & URL
               </TableCell>
-              <TableCell isHeader className="px-5 py-3.5 font-semibold text-gray-600 text-start text-xs uppercase tracking-wider dark:text-gray-400">
-                Contact Details
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3.5 font-semibold text-gray-600 text-start text-xs uppercase tracking-wider dark:text-gray-400">
+              <TableCell isHeader className="px-5 py-4 font-bold text-gray-400 text-start text-[10px] uppercase tracking-widest dark:text-gray-500">
                 Location
               </TableCell>
-              <TableCell isHeader className="px-5 py-3.5 font-semibold text-gray-600 text-start text-xs uppercase tracking-wider dark:text-gray-400">
+              <TableCell isHeader className="px-5 py-4 font-bold text-gray-400 text-start text-[10px] uppercase tracking-widest dark:text-gray-500">
                 Status
               </TableCell>
-              <TableCell isHeader className="px-5 py-3.5 font-semibold text-gray-600 text-end text-xs uppercase tracking-wider dark:text-gray-400">
+              <TableCell isHeader className="px-5 py-4 font-bold text-gray-400 text-end text-[10px] uppercase tracking-widest dark:text-gray-500">
                 Actions
               </TableCell>
             </TableRow>
@@ -481,30 +396,31 @@ export default function RecentOrders() {
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
             {paginatedUsers.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
-                  <p className="text-gray-500 dark:text-gray-400">
-                    {searchQuery ? "No matching records found." : "No entries yet."}
-                  </p>
+                <TableCell colSpan={5} className="py-20 text-center">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="p-3 bg-gray-50 rounded-full dark:bg-gray-800">
+                      <AlertIcon className="w-6 h-6 text-gray-400" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {searchQuery ? "No matching records found." : "No entries matches your criteria."}
+                    </p>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedUsers.map((user, index) => (
+              paginatedUsers.map((user) => (
                 <TableRow
                   key={user.id}
-                  className="cursor-pointer hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-all duration-200"
+                  className="group hover:bg-gray-50/50 dark:hover:bg-white/[0.01] transition-all duration-200"
                   onClick={() => handleRowClick(user)}
                 >
-                  <TableCell className="px-5 py-4 text-gray-500 text-xs font-mono">
-                    {(startIndex + index + 1).toString().padStart(2, '0')}
-                  </TableCell>
-
-                  <TableCell className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm uppercase">
-                        {(user.username || "U").charAt(0)}
+                  <TableCell className="px-5 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-white font-bold text-sm shadow-sm transition-transform group-hover:scale-105 shadow-brand-500/20">
+                        {(user.username || "U").charAt(0).toUpperCase()}
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-semibold text-gray-900 text-sm dark:text-white/95">
+                        <span className="font-bold text-gray-900 text-sm dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                           {user.username}
                         </span>
                         <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -514,9 +430,9 @@ export default function RecentOrders() {
                     </div>
                   </TableCell>
 
-                  <TableCell className="px-5 py-4 text-start">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <TableCell className="px-5 py-5">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                         +{user.countrycode} {user.phonenumber}
                       </span>
                       {user.producturl && (
@@ -525,7 +441,7 @@ export default function RecentOrders() {
                           target="_blank"
                           rel="noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="text-[10px] text-blue-500 hover:underline truncate max-w-[150px]"
+                          className="text-[11px] text-brand-500 hover:text-brand-600 font-medium truncate max-w-[200px]"
                         >
                           {user.producturl.replace(/^https?:\/\//, '')}
                         </a>
@@ -533,44 +449,45 @@ export default function RecentOrders() {
                     </div>
                   </TableCell>
 
-                  <TableCell className="px-5 py-4 text-start">
-                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  <TableCell className="px-5 py-5">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                       {user.countryname}
                     </span>
                   </TableCell>
 
-                  <TableCell className="px-5 py-4 text-start">
+                  <TableCell className="px-5 py-5 text-start">
                     <Badge
                       color={getStatusBadgeColor(user.status)}
                       variant="light"
                       size="sm"
+                      className="capitalize px-3 py-1 font-bold"
                     >
                       {user.status || "interested"}
                     </Badge>
                   </TableCell>
 
-                  <TableCell className="px-5 py-4">
-                    <div className="flex items-center justify-end gap-1.5">
+                  <TableCell className="px-5 py-5">
+                    <div className="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={(e) => handleViewClick(e, user)}
-                        className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
-                        title="View details"
+                        className="p-2 rounded-lg text-gray-500 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-500/10 dark:hover:text-blue-400 transition-all"
+                        title="Quick View"
                       >
-                        <EyeIcon className="w-4 h-4" />
+                        <EyeIcon className="w-4.5 h-4.5" />
                       </button>
                       <button
                         onClick={(e) => handleEditClick(e, user)}
-                        className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-900/20 transition-colors"
-                        title="Manage"
+                        className="p-2 rounded-lg text-gray-500 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400 transition-all"
+                        title="Manage Record"
                       >
-                        <PencilIcon className="w-4 h-4" />
+                        <PencilIcon className="w-4.5 h-4.5" />
                       </button>
                       <button
                         onClick={(e) => handleDeleteClick(e, user)}
-                        className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20 transition-colors"
-                        title="Delete"
+                        className="p-2 rounded-lg text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 transition-all"
+                        title="Remove Entry"
                       >
-                        <TrashBinIcon className="w-4 h-4" />
+                        <TrashBinIcon className="w-4.5 h-4.5" />
                       </button>
                     </div>
                   </TableCell>
@@ -581,25 +498,18 @@ export default function RecentOrders() {
         </Table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-end">
+      <div className="px-5 py-5 sm:px-6 bg-gray-50/30 dark:bg-gray-800/10 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          Showing <span className="text-gray-900 dark:text-white">{startIndex + 1}</span> to <span className="text-gray-900 dark:text-white">{Math.min(endIndex, filteredUsers.length)}</span> of <span className="text-gray-900 dark:text-white">{filteredUsers.length}</span> records
+        </p>
+        {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
-        </div>
-      )}
-
-      {/* Show current page info */}
-      {filteredUsers.length > 0 && (
-        <div className="mt-2 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Showing {startIndex + 1}-{Math.min(endIndex, filteredUsers.length)} of {filteredUsers.length} users
-          </p>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Comment Modal */}
       <Modal
@@ -720,10 +630,10 @@ export default function RecentOrders() {
                     onChange={(e) => setStatusValue(e.target.value)}
                     className="mt-2 w-full h-11 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-theme-xs focus:outline-hidden focus:ring-3 focus:border-brand-300 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:border-gray-700"
                   >
-                    <option value="interested">Interested</option>
-                    <option value="ongoing">Ongoing</option>
-                    <option value="Hold">Hold</option>
-                    <option value="Declined">Declined</option>
+                    <option value="interested" className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">Interested</option>
+                    <option value="ongoing" className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">Ongoing</option>
+                    <option value="Hold" className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">Hold</option>
+                    <option value="Declined" className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">Declined</option>
                   </select>
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     Current status: <span className="font-medium">{statusValue}</span>

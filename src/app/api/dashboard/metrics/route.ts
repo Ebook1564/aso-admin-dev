@@ -14,70 +14,23 @@ export async function GET() {
     const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
     const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
 
-    // 1. Today Login - Count users who logged in today
-    // For now, we'll count all users as a placeholder until login tracking is implemented
-    // You can add a login_date column to usertable later
+    // 1. Today Login - Count all users as placeholder for now
     let todayLoginCount = 0;
     try {
-      // Check if usertable has a login_date or last_login column
-      const checkColumnQuery = `
-        SELECT column_name 
-        FROM information_schema.columns 
-        WHERE table_name = 'usertable' 
-        AND column_name IN ('login_date', 'last_login', 'lastlogindate')
-        LIMIT 1
-      `;
-      const columnCheck = await pool.query(checkColumnQuery);
-      
-      if (columnCheck.rows.length > 0) {
-        const columnName = columnCheck.rows[0].column_name;
-        const todayLoginQuery = `
-          SELECT COUNT(DISTINCT id) as count
-          FROM usertable
-          WHERE DATE(${columnName}) = CURRENT_DATE
-        `;
-        const todayResult = await pool.query(todayLoginQuery);
-        todayLoginCount = parseInt(todayResult.rows[0]?.count || '0', 10);
-      } else {
-        // If no login tracking column exists, count all users as placeholder
-        const allUsersQuery = `SELECT COUNT(*) as count FROM usertable`;
-        const allUsersResult = await pool.query(allUsersQuery);
-        todayLoginCount = parseInt(allUsersResult.rows[0]?.count || '0', 10);
-      }
-    } catch (error) {
-      console.error("Error fetching today login count:", error);
-      // Fallback to counting all users
-      const allUsersQuery = `SELECT COUNT(*) as count FROM usertable`;
+      const allUsersQuery = `SELECT COUNT(*) as count FROM creatednewusertable`;
       const allUsersResult = await pool.query(allUsersQuery);
       todayLoginCount = parseInt(allUsersResult.rows[0]?.count || '0', 10);
+    } catch (error) {
+      console.error("Error fetching today login count:", error);
     }
 
-    // 2. Total Login - Count all users in usertable
-    const totalLoginQuery = `SELECT COUNT(*) as count FROM usertable`;
+    // 2. Total Login - Count all users in creatednewusertable
+    const totalLoginQuery = `SELECT COUNT(*) as count FROM creatednewusertable`;
     const totalLoginResult = await pool.query(totalLoginQuery);
     const totalLoginCount = parseInt(totalLoginResult.rows[0]?.count || '0', 10);
 
-    // 3. Monthly Revenue - Sum of completed settlements for current month
+    // 3. Monthly Revenue - Placeholder
     let monthlyRevenue = 0;
-    try {
-      // Check if settlements table exists
-      const settlementsQuery = `
-        SELECT SUM(amount) as total
-        FROM settlements
-        WHERE status = 'completed'
-        AND created_at >= $1
-        AND created_at <= $2
-      `;
-      const revenueResult = await pool.query(settlementsQuery, [
-        currentMonthStart.toISOString(),
-        currentMonthEnd.toISOString()
-      ]);
-      monthlyRevenue = parseFloat(revenueResult.rows[0]?.total || '0');
-    } catch (error) {
-      // If settlements table doesn't exist or has different structure, use placeholder
-      console.error("Error fetching monthly revenue:", error);
-      monthlyRevenue = 0;
-    }
 
     // 4. Active Users - Same as Today Login
     const activeUsersCount = todayLoginCount;

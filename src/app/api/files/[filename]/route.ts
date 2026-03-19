@@ -5,11 +5,12 @@ import path from 'path';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
-    const filename = decodeURIComponent(params.filename as string);
-    console.log('🔍 Searching for:', filename);
+    const { filename } = await params;
+    const decodedFilename = decodeURIComponent(filename as string);
+    console.log('🔍 Searching for:', decodedFilename);
 
     // ✅ FIXED: Search MULTIPLE ways + LIKE pattern
     const result = await pool.query(
@@ -19,7 +20,7 @@ export async function GET(
        OR attachment_filename LIKE $2 
        OR attachment_filename LIKE $3
        LIMIT 1`,
-      [filename, `%${path.basename(filename)}`, `%${filename.split('_')[0]}%`]
+      [decodedFilename, `%${path.basename(decodedFilename)}`, `%${decodedFilename.split('_')[0]}%`]
     );
 
     console.log('🔍 DB found:', result.rows.length, 'rows');
@@ -30,9 +31,9 @@ export async function GET(
 
     // ✅ Try filesystem ANYWAY (bypass DB check)
     const possiblePaths = [
-      path.join(process.cwd(), 'uploads', filename),
-      path.join(process.cwd(), 'public/uploads', filename),
-      path.join(process.cwd(), 'public', filename),
+      path.join(process.cwd(), 'uploads', decodedFilename),
+      path.join(process.cwd(), 'public/uploads', decodedFilename),
+      path.join(process.cwd(), 'public', decodedFilename),
     ];
 
     for (const filePath of possiblePaths) {
@@ -45,7 +46,7 @@ export async function GET(
         return new NextResponse(uint8Array, {
           headers: {
             'Content-Type': 'application/octet-stream',
-            'Content-Disposition': `inline; filename="${path.basename(filename)}"`,
+            'Content-Disposition': `inline; filename="${path.basename(decodedFilename)}"`,
             'Content-Length': uint8Array.length.toString(),
           },
         });
@@ -53,7 +54,7 @@ export async function GET(
     }
 
     return NextResponse.json({ 
-      error: `File "${filename}" not found`, 
+      error: `File "${decodedFilename}" not found`, 
       checkedPaths: possiblePaths 
     }, { status: 404 });
 

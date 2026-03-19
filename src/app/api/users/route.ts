@@ -12,7 +12,6 @@ export async function GET() {
               last_7d_revenue,
               this_month_revenue,
               last_28d_revenue,
-              settlement_status,
               created_at
        FROM userdatatable
        ORDER BY id DESC`
@@ -40,14 +39,13 @@ export async function POST(request: Request) {
       yesterday_revenue,
       last_7d_revenue,
       this_month_revenue,
-      last_28d_revenue,
-      settlement_status
+      last_28d_revenue
     } = body;
 
     const result = await pool.query(
       `INSERT INTO userdatatable (
-        useremail, today_revenue, yesterday_revenue, last_7d_revenue, this_month_revenue, last_28d_revenue, settlement_status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        useremail, today_revenue, yesterday_revenue, last_7d_revenue, this_month_revenue, last_28d_revenue
+      ) VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *`,
       [
         useremail,
@@ -55,8 +53,7 @@ export async function POST(request: Request) {
         yesterday_revenue || 0,
         last_7d_revenue || 0,
         this_month_revenue || 0,
-        last_28d_revenue || 0,
-        settlement_status || 'pending'
+        last_28d_revenue || 0
       ]
     );
 
