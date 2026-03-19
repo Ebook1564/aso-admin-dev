@@ -14,7 +14,6 @@ import Pagination from "../tables/Pagination";
 import Badge from "../ui/badge/Badge";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
 import Label from "../form/Label";
 
 // Shape of one row coming from /api/users (AWS RDS usertable)
@@ -62,7 +61,7 @@ export default function RecentOrders() {
         } else {
           setError(json.error || "API returned error");
         }
-      } catch (e) {
+      } catch {
         setError("Failed to fetch users");
       } finally {
         setLoading(false);
@@ -298,7 +297,9 @@ export default function RecentOrders() {
                 className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/5 transition-all"
                 title="Export to CSV"
               >
-                <DownloadIcon className="w-4 h-4" />
+                <span className="w-4 h-4">
+                  <DownloadIcon />
+                </span>
                 Export CSV
               </button>
               <button
@@ -399,7 +400,9 @@ export default function RecentOrders() {
                 <TableCell colSpan={5} className="py-20 text-center">
                   <div className="flex flex-col items-center gap-3">
                     <div className="p-3 bg-gray-50 rounded-full dark:bg-gray-800">
-                      <AlertIcon className="w-6 h-6 text-gray-400" />
+                      <span className="w-6 h-6 text-gray-400">
+                        <AlertIcon />
+                      </span>
                     </div>
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                       {searchQuery ? "No matching records found." : "No entries matches your criteria."}
@@ -473,21 +476,27 @@ export default function RecentOrders() {
                         className="p-2 rounded-lg text-gray-500 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-500/10 dark:hover:text-blue-400 transition-all"
                         title="Quick View"
                       >
-                        <EyeIcon className="w-4.5 h-4.5" />
+                         <span className="w-4.5 h-4.5">
+                           <EyeIcon />
+                         </span>
                       </button>
                       <button
                         onClick={(e) => handleEditClick(e, user)}
                         className="p-2 rounded-lg text-gray-500 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400 transition-all"
                         title="Manage Record"
                       >
-                        <PencilIcon className="w-4.5 h-4.5" />
+                         <span className="w-4.5 h-4.5">
+                           <PencilIcon />
+                         </span>
                       </button>
                       <button
                         onClick={(e) => handleDeleteClick(e, user)}
                         className="p-2 rounded-lg text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 transition-all"
                         title="Remove Entry"
                       >
-                        <TrashBinIcon className="w-4.5 h-4.5" />
+                         <span className="w-4.5 h-4.5">
+                           <TrashBinIcon />
+                         </span>
                       </button>
                     </div>
                   </TableCell>
@@ -530,7 +539,9 @@ export default function RecentOrders() {
             {/* User Information Section */}
             <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50 p-5">
               <div className="flex items-center gap-2 mb-4">
-                <UserIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <span className="w-5 h-5 text-gray-600 dark:text-gray-400">
+                  <UserIcon />
+                </span>
                 <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   User Information
                 </h5>
@@ -538,7 +549,9 @@ export default function RecentOrders() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5">
-                    <UserIcon className="w-3.5 h-3.5" />
+                    <span className="w-3.5 h-3.5">
+                      <UserIcon />
+                    </span>
                     Username
                   </Label>
                   <div className="mt-1 px-3 py-2.5 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 text-sm font-medium text-gray-800 dark:text-white/90">
@@ -548,7 +561,9 @@ export default function RecentOrders() {
 
                 <div>
                   <Label className="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5">
-                    <EnvelopeIcon className="w-3.5 h-3.5" />
+                    <span className="w-3.5 h-3.5">
+                      <EnvelopeIcon />
+                    </span>
                     Email
                   </Label>
                   <div className="mt-1 px-3 py-2.5 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
@@ -556,7 +571,9 @@ export default function RecentOrders() {
                       href={`mailto:${selectedUser.useremail}`}
                       className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 break-all flex items-center gap-1.5"
                     >
-                      <MailIcon className="w-4 h-4" />
+                      <span className="w-4 h-4">
+                        <MailIcon />
+                      </span>
                       {selectedUser.useremail}
                     </a>
                   </div>
@@ -706,7 +723,9 @@ export default function RecentOrders() {
 
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4 p-4 rounded-lg border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20">
-                <AlertIcon className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+                <span className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0">
+                  <AlertIcon />
+                </span>
                 <p className="text-sm text-red-800 dark:text-red-300">
                   Are you sure you want to delete this user? This action cannot be undone.
                 </p>

@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import { ShieldCheck, Mail, Calendar, DollarSign, FileText, Package, Download } from "lucide-react";
 
 interface UserDetailPanelProps {
-  user: any;
+  user: Record<string, any>;
 }
 
 const UserDetailPanel: React.FC<UserDetailPanelProps> = ({ user }) => {
-  const [deliveries, setDeliveries] = useState<any[]>([]);
+  const [deliveries, setDeliveries] = useState<Record<string, any>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

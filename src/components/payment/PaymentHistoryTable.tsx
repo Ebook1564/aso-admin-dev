@@ -154,7 +154,7 @@ export default function PaymentHistoryTable() {
       } else {
         console.error(result.error || "Failed to fetch payment history");
       }
-    } catch (err) {
+    } catch {
       console.error("An error occurred while fetching payment data");
     } finally {
       setLoading(false);
@@ -179,7 +179,7 @@ export default function PaymentHistoryTable() {
       } else {
         alert("Failed to load details: " + result.error);
       }
-    } catch (error) {
+    } catch {
       alert("Error loading transaction data");
     } finally {
       setDetailLoading(false);

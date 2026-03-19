@@ -143,8 +143,9 @@ const handleSave = async () => {
     } else {
       alert(data.error || "Failed to save");
     }
-  } catch (err: any) {
-    alert(`Error: ${err.message}`);
+  } catch (err: unknown) {
+    const error = err as Error;
+    alert(`Error: ${error.message}`);
   }
 };
 
@@ -167,9 +168,10 @@ const handleSave = async () => {
           console.error("Delete failed:", data.error);
           alert(data.error || "Failed to delete game");
         }
-      } catch (err: any) {
-        console.error("Delete error:", err);
-        alert(`An error occurred while deleting game: ${err.message}`);
+      } catch (err) {
+        const error = err as Error;
+        console.error("Delete error:", error);
+        alert(`An error occurred while deleting game: ${error.message}`);
       }
     }
   };
@@ -364,7 +366,7 @@ const handleSave = async () => {
                 </Button>
                 <Button onClick={() => {
                   viewModal.closeModal();
-                  handleEditClick({} as any, viewGame);
+                  handleEditClick({ stopPropagation: () => {} } as React.MouseEvent, viewGame);
                 }}>
                   Edit Game
                 </Button>

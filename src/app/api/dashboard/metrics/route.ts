@@ -11,8 +11,7 @@ export async function GET() {
     todayEnd.setHours(23, 59, 59, 999);
 
     // Get current month date range
-    const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-    const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+    // currentMonthStart/End unused removed
 
     // 1. Today Login - Count all users as placeholder for now
     let todayLoginCount = 0;

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function CreatedUsersPage() {
-  const [data, setData] = useState<unknown[]>([]);
+  const [data, setData] = useState<Record<string, unknown>[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -22,7 +22,7 @@ export default function CreatedUsersPage() {
         } else {
           setError(result.error || "Failed to fetch data");
         }
-      } catch (err) {
+      } catch {
         setError("An error occurred while fetching data");
       } finally {
         setLoading(false);
@@ -54,7 +54,7 @@ export default function CreatedUsersPage() {
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-              {data.map((row: any, i) => (
+              {data.map((row: Record<string, unknown>, i) => (
                 <TableRow key={i} className="hover:bg-gray-50 dark:hover:bg-white/5">
                   {columns.map((col) => (
                     <TableCell key={col} className="px-5 py-4 text-sm text-gray-700 dark:text-gray-300">

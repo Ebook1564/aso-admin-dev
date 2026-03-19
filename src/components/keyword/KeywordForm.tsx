@@ -10,12 +10,10 @@ interface KeywordFormProps {
   onUploadKeywords: (keywords: string[]) => void;
   onUploadPDF?: (file: File, paymentId: string) => void;
   onSelectUser: (user: Record<string, unknown>) => void;
-  selectedUser: Record<string, unknown> | null;
-  payment: Record<string, unknown> | null;
   onPaymentChange: (p: Record<string, unknown> | null) => void;
 }
 
-export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPDF, onSelectUser, selectedUser, payment, onPaymentChange }: KeywordFormProps) {
+export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPDF, onSelectUser, onPaymentChange }: KeywordFormProps) {
   const [searchPayment, setSearchPayment] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [payments, setPayments] = useState<Record<string, unknown>[]>([]);
@@ -37,18 +35,7 @@ export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPD
     }
   };
 
-  const handleUserSelect = (u: Record<string, unknown>) => {
-    onSelectUser(u);
-    const userPayments = (u.payments as Record<string, unknown>[] || []).map((p: Record<string, unknown>) => ({
-      // Assuming 'p' has 'id', 'name', 'amount', 'transactionid'
-      id: p.id,
-      name: p.name,
-      amount: p.amount,
-      transactionid: p.transactionid,
-    }));
-    setPayments(userPayments);
-    setSearchPayment("");
-  };
+  // handleUserSelect removed because it was unused
 
   const handleSelectTransaction = (payment: Record<string, unknown>) => {
     setSelectedPayment(payment);

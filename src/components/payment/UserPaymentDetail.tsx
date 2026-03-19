@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Download, Globe, Mail, Phone, Calendar, Hash, CreditCard, ShieldCheck, Save, Loader2, CheckCircle2, ExternalLink, FileUp, FileCheck, AlertCircle, Trash2 } from "lucide-react";
 import { PaymentRecord } from "./PaymentHistoryTable";
 import { Modal } from "../ui/modal";
+import Image from "next/image";
 
 interface DeliveryRecord {
   id: number;
@@ -71,7 +72,7 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
         ["Phone Number", payment.phonenumber || "N/A"],
         ["Country", payment.country || "N/A"],
       ];
-      (doc as any).autoTable({
+      (doc as unknown as Record<string, any>).autoTable({
         startY: 55,
         head: [["Field", "Information"]],
         body: customerData,
@@ -84,8 +85,8 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
          ["Amount Paid", `$${parseFloat(payment.amount).toFixed(2)}`],
          ["Payment Status", status.toUpperCase()],
       ];
-      const lastY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 10 : 70;
-      (doc as any).autoTable({
+      const lastY = (doc as unknown as Record<string, any>).lastAutoTable ? (doc as unknown as Record<string, any>).lastAutoTable.finalY + 10 : 70;
+      (doc as unknown as Record<string, any>).autoTable({
         startY: lastY,
         head: [["Payment Details", "Value"]],
         body: paymentData,
@@ -96,7 +97,7 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
       });
       doc.setFontSize(10);
       doc.setTextColor(150);
-      const finalY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY : 150;
+      const finalY = (doc as unknown as Record<string, any>).lastAutoTable ? (doc as unknown as Record<string, any>).lastAutoTable.finalY : 150;
       doc.text("Thank you for your business!", 105, finalY + 20, { align: 'center' });
       doc.save(`Receipt_${payment.transactionid}.pdf`);
     } catch (err) {
@@ -386,10 +387,11 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
 
               {payment.screenshot_url && (
                 <div className="relative group/img overflow-hidden rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 aspect-video flex items-center justify-center cursor-zoom-in" onClick={() => setIsLightboxOpen(true)}>
-                  <img 
+                  <Image 
                     src={payment.screenshot_url} 
                     alt="Payment Proof" 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <div className="p-3 bg-white text-gray-900 rounded-full shadow-2xl scale-0 group-hover:scale-100 transition-transform">
@@ -410,9 +412,11 @@ export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPayme
       >
          <div className="flex flex-col items-center gap-6">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-h-[80vh]">
-              <img 
+              <Image 
                 src={payment.screenshot_url} 
                 alt="Payment Proof Full View"
+                width={800}
+                height={600}
                 className="max-w-full max-h-full object-contain" 
               />
             </div>

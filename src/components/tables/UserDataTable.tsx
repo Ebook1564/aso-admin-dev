@@ -155,8 +155,9 @@ export default function UserDataTable() {
             } else {
                 alert(data.error || "Failed to save");
             }
-        } catch (err: any) {
-            alert(`Error: ${err.message}`);
+        } catch (err) {
+            const error = err as Error;
+            alert(`Error: ${error.message}`);
         }
     };
 
@@ -176,8 +177,9 @@ export default function UserDataTable() {
                 } else {
                     alert(data.error || "Failed to delete record");
                 }
-            } catch (err: any) {
-                alert(`An error occurred while deleting record: ${err.message}`);
+            } catch (err) {
+                const error = err as Error;
+                alert(`An error occurred while deleting record: ${error.message}`);
             }
         }
     };
@@ -401,7 +403,7 @@ export default function UserDataTable() {
                             </Button>
                             <Button onClick={() => {
                                 viewModal.closeModal();
-                                handleEditClick({} as any, viewUser);
+                                handleEditClick({ stopPropagation: () => {} } as React.MouseEvent, viewUser);
                             }}>
                                 Edit Data
                             </Button>
