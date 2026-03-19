@@ -37,7 +37,7 @@ export async function GET(request: Request) {
             LEFT JOIN formfilledtable f ON p.email = f.email
         `;
         let countQuery = `SELECT COUNT(*) FROM asopayments`;
-        const values: any[] = [];
+        const values: (string | number)[] = [];
 
         if (search) {
             const searchPattern = `%${search}%`;
@@ -67,11 +67,12 @@ export async function GET(request: Request) {
             page,
             limit
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API /api/payments-history GET error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to fetch payment history";
         return NextResponse.json({ 
             success: false, 
-            error: error?.message || "Failed to fetch payment history" 
+            error: errorMessage 
         }, { status: 500 });
     }
 }

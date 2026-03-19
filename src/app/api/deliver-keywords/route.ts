@@ -71,11 +71,12 @@ export async function POST(request: Request) {
             message: "Keywords delivered successfully" 
         });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API /api/deliver-keywords POST error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to deliver keywords";
         return NextResponse.json({ 
             success: false, 
-            error: error?.message || "Failed to deliver keywords" 
+            error: errorMessage 
         }, { status: 500 });
     }
 }
@@ -105,7 +106,7 @@ export async function GET(request: Request) {
         const result = await pool.query("SELECT * FROM taskdeliverkeywordtable ORDER BY created_at DESC");
         return NextResponse.json({ success: true, data: result.rows });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API /api/deliver-keywords GET error:", error);
         return NextResponse.json({ success: false, error: "Failed to fetch delivery records" }, { status: 500 });
     }
@@ -128,7 +129,7 @@ export async function DELETE(request: Request) {
         }
 
         return NextResponse.json({ success: true, message: "Delivery record deleted successfully" });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API /api/deliver-keywords DELETE error:", error);
         return NextResponse.json({ success: false, error: "Failed to delete delivery record" }, { status: 500 });
     }

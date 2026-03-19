@@ -3,19 +3,23 @@
 import React, { useState } from "react";
 import Button from "../ui/button/Button";
 import Label from "../form/Label";
-import { DownloadIcon, PlusIcon, FileText, Search, CreditCard, FileUp, CheckCircle2 } from "lucide-react";
+import { DownloadIcon, PlusIcon, FileText, Search, CreditCard, CheckCircle2 } from "lucide-react";
 
 interface KeywordFormProps {
-  onAddKeyword: (keyword: string, payment?: any) => void;
+  onAddKeyword: (keyword: string, payment?: Record<string, unknown>) => void;
   onUploadKeywords: (keywords: string[]) => void;
   onUploadPDF?: (file: File, paymentId: string) => void;
+  onSelectUser: (user: Record<string, unknown>) => void;
+  selectedUser: Record<string, unknown> | null;
+  payment: Record<string, unknown> | null;
+  onPaymentChange: (p: Record<string, unknown> | null) => void;
 }
 
-export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPDF }: KeywordFormProps) {
+export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPDF, onSelectUser, selectedUser, payment, onPaymentChange }: KeywordFormProps) {
   const [searchPayment, setSearchPayment] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [payments, setPayments] = useState<any[]>([]);
-  const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const [payments, setPayments] = useState<Record<string, unknown>[]>([]);
+  const [selectedPayment, setSelectedPayment] = useState<Record<string, unknown> | null>(null);
 
   const handlePaymentSearch = async () => {
     if (!searchPayment.trim()) return;
@@ -33,8 +37,22 @@ export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPD
     }
   };
 
-  const handleSelectTransaction = (payment: any) => {
+  const handleUserSelect = (u: Record<string, unknown>) => {
+    onSelectUser(u);
+    const userPayments = (u.payments as Record<string, unknown>[] || []).map((p: Record<string, unknown>) => ({
+      // Assuming 'p' has 'id', 'name', 'amount', 'transactionid'
+      id: p.id,
+      name: p.name,
+      amount: p.amount,
+      transactionid: p.transactionid,
+    }));
+    setPayments(userPayments);
+    setSearchPayment("");
+  };
+
+  const handleSelectTransaction = (payment: Record<string, unknown>) => {
     setSelectedPayment(payment);
+    onPaymentChange(payment); // Update the parent component's payment state
     // Also add the plan as a keyword by default if that's the desired behavior
     onAddKeyword(payment.amount + " USD Order", payment);
     setPayments([]);
@@ -52,7 +70,7 @@ export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPD
         return;
       }
       if (onUploadPDF) {
-        onUploadPDF(file, selectedPayment.id);
+        onUploadPDF(file, selectedPayment.id as string); // Assuming id is a string
       }
       e.target.value = "";
       return;
@@ -110,15 +128,15 @@ export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPD
               {payments.length > 0 && (
                 <div className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-50 max-h-64 overflow-y-auto p-1 animate-in slide-in-from-top-2 duration-200">
                   <div className="px-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-50 dark:border-gray-800/50">Select Transaction</div>
-                  {payments.map(p => (
+                  {payments.map((p: Record<string, unknown>) => (
                     <button
-                      key={p.id}
+                      key={String(p.id)}
                       onClick={() => handleSelectTransaction(p)}
                       className="w-full text-left p-3 hover:bg-brand-500/5 rounded-xl flex items-center justify-between group transition-all"
                     >
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-brand-500">{p.name}</span>
-                        <span className="text-[10px] text-gray-500 font-mono italic">TXN: {p.transactionid} • ${p.amount}</span>
+                        <span className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-brand-500">{String(p.name)}</span>
+                        <span className="text-[10px] text-gray-500 font-mono italic">TXN: {String(p.transactionid)} • ${String(p.amount)}</span>
                       </div>
                       <PlusIcon size={14} className="text-brand-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </button>
@@ -132,10 +150,10 @@ export default function KeywordForm({ onAddKeyword, onUploadKeywords, onUploadPD
                   <div className="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white">
                      <CheckCircle2 size={20} />
                   </div>
-                  <div className="flex flex-col">
-                     <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-tight">{selectedPayment.name}</span>
-                     <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-widest">${selectedPayment.amount} • {selectedPayment.transactionid}</span>
-                  </div>
+                   <div className="flex flex-col">
+                     <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-tight">{String(selectedPayment['name'] ?? 'N/A')}</span>
+                     <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-widest">${String(selectedPayment['amount'] ?? '0')} • {String(selectedPayment['transactionid'] ?? 'N/A')}</span>
+                   </div>
                </div>
                <button 
                   onClick={() => setSelectedPayment(null)}

@@ -26,11 +26,12 @@ export async function POST(request: Request) {
             success: true,
             data: result.rows[0]
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API /api/payments-history/update-status POST error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to update payment status";
         return NextResponse.json({ 
             success: false, 
-            error: error?.message || "Failed to update payment status" 
+            error: errorMessage 
         }, { status: 500 });
     }
 }

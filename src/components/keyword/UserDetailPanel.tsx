@@ -1,13 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { User, ShieldCheck, Mail, MapPin, Calendar, DollarSign, FileText, CheckCircle2, Package, Download, ExternalLink } from "lucide-react";
+import { ShieldCheck, Mail, Calendar, DollarSign, FileText, Package, Download } from "lucide-react";
 
 interface UserDetailPanelProps {
   user: any;
-  onUploadReport: (data: any) => void;
 }
 
-const UserDetailPanel: React.FC<UserDetailPanelProps> = ({ user, onUploadReport }) => {
+const UserDetailPanel: React.FC<UserDetailPanelProps> = ({ user }) => {
   const [deliveries, setDeliveries] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

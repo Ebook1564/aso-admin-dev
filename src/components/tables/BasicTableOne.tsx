@@ -27,20 +27,9 @@ interface Game {
   orientation: string;
 }
 
-const initialFormData: Game = {
-  uid: 0,
-  title: "",
-  thumb: "",
-  categories: [],
-  description: "",
-  embedurl: "",
-  orientation: "portrait",
-};
-
 export default function BasicTableOne() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   // Modals
   const addModal = useModal();
@@ -68,10 +57,10 @@ export default function BasicTableOne() {
       if (data.success) {
         setGames(data.data);
       } else {
-        setError(data.error || "Failed to fetch games");
+        console.error(data.error || "Failed to fetch games");
       }
-    } catch (err) {
-      setError("An error occurred while fetching games");
+    } catch {
+      console.error("An error occurred while fetching games");
     } finally {
       setLoading(false);
     }
@@ -120,7 +109,7 @@ export default function BasicTableOne() {
     addModal.openModal();
   };
 
-  const handleInputChange = (field: keyof Game, value: any) => {
+  const handleInputChange = (field: keyof Game, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -203,7 +192,7 @@ const handleSave = async () => {
             onClick={handleAddClick}
             className="inline-flex items-center gap-2"
           >
-            <PlusIcon className="w-4 h-4" />
+            <span className="w-4 h-4"><PlusIcon /></span>
             Add New Game
           </Button>
         </div>
@@ -279,7 +268,7 @@ const handleSave = async () => {
                         aria-label="View game"
                         title="View details"
                       >
-                        <EyeIcon className="w-4 h-4" />
+                        <span className="w-4 h-4"><EyeIcon /></span>
                       </button>
                       <button
                         onClick={(e) => handleEditClick(e, game)}
@@ -287,7 +276,7 @@ const handleSave = async () => {
                         aria-label="Edit game"
                         title="Edit game"
                       >
-                        <PencilIcon className="w-4 h-4" />
+                        <span className="w-4 h-4"><PencilIcon /></span>
                       </button>
                       <button
                         onClick={(e) => handleDeleteClick(e, game)}
@@ -295,7 +284,7 @@ const handleSave = async () => {
                         aria-label="Delete game"
                         title="Delete game"
                       >
-                        <TrashBinIcon className="w-4 h-4" />
+                        <span className="w-4 h-4"><TrashBinIcon /></span>
                       </button>
                     </div>
                   </TableCell>
@@ -439,7 +428,7 @@ const handleSave = async () => {
                   placeholder="Select orientation"
                 />
                 <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                  <ChevronDownIcon className="w-4 h-4" />
+                  <span className="w-4 h-4"><ChevronDownIcon /></span>
                 </span>
               </div>
             </div>
@@ -500,7 +489,7 @@ const handleSave = async () => {
       >
         <div className="text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/15 mb-4">
-            <TrashBinIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+            <span className="h-6 w-6 text-red-600 dark:text-red-400"><TrashBinIcon /></span>
           </div>
           <h4 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">
             Delete Game

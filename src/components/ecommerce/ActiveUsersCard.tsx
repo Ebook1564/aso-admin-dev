@@ -3,13 +3,6 @@ import React, { useState, useEffect } from "react";
 import Badge from "../ui/badge/Badge";
 import { ArrowUpIcon, GroupIcon } from "@/icons";
 
-interface DashboardMetrics {
-  todayLogin: number;
-  totalLogin: number;
-  monthlyRevenue: number;
-  activeUsers: number;
-}
-
 export default function ActiveUsersCard() {
   const [activeUsers, setActiveUsers] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -46,7 +39,7 @@ export default function ActiveUsersCard() {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6 h-full flex flex-col">
       <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-        <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
+        <span className="text-gray-800 size-6 dark:text-white/90"><GroupIcon /></span>
       </div>
 
       <div className="flex items-end justify-between mt-5 flex-grow">

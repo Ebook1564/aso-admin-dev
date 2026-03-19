@@ -1,9 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FileText, Download, Clock, ExternalLink, Search, CheckCircle2 } from "lucide-react";
+import { FileText, Download, Clock, Search, CheckCircle2 } from "lucide-react";
+
+interface KeywordReport {
+  id: number;
+  file_name: string;
+  pdf_url: string;
+  payment_id?: string;
+  payment_plan?: string;
+  created_at: string;
+}
 
 const KeywordReports: React.FC = () => {
-  const [reports, setReports] = useState<any[]>([]);
+  const [reports, setReports] = useState<KeywordReport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 

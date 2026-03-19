@@ -17,7 +17,8 @@ export async function GET(
     );
 
     return NextResponse.json({ success: true, data: result.rows });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

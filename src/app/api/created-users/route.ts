@@ -14,10 +14,11 @@ export async function GET() {
       { success: true, data: result.rows },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("API /api/created-users GET error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Database query failed";
     return NextResponse.json(
-      { success: false, error: error?.message || "Database query failed" },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

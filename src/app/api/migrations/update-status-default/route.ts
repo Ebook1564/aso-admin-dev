@@ -6,7 +6,7 @@ import pool from "../../../../lib/db";
 export async function POST() {
   try {
     const queries: string[] = [];
-    const results: any[] = [];
+    const results: { query: string; success: boolean; error?: string; note?: string }[] = [];
 
     // Update the default value for the status column
     queries.push(`
@@ -29,11 +29,12 @@ export async function POST() {
     // Execute all queries
     for (const query of queries) {
       try {
-        const result = await pool.query(query);
+        await pool.query(query);
         results.push({ query: query.trim().substring(0, 50) + '...', success: true });
-      } catch (error: any) {
+      } catch (error: unknown) {
         // If comment doesn't exist or can't be updated, that's okay
-        if (error?.message?.includes('does not exist') || error?.message?.includes('COMMENT')) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (errorMessage.includes('does not exist') || errorMessage.includes('COMMENT')) {
           results.push({ 
             query: query.trim().substring(0, 50) + '...', 
             success: true,
@@ -43,7 +44,7 @@ export async function POST() {
           results.push({ 
             query: query.trim().substring(0, 50) + '...', 
             success: false, 
-            error: error.message 
+            error: errorMessage 
           });
         }
       }
@@ -57,12 +58,13 @@ export async function POST() {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Migration API error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Migration failed";
     return NextResponse.json(
       {
         success: false,
-        error: error?.message || "Migration failed",
+        error: errorMessage,
       },
       { status: 500 }
     );

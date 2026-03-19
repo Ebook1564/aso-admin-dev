@@ -1,9 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Download, Globe, Mail, Phone, Calendar, Hash, CreditCard, ShieldCheck, Save, Loader2, CheckCircle2, ExternalLink, FileUp, FileCheck, AlertCircle, Trash2 } from "lucide-react";
 import { PaymentRecord } from "./PaymentHistoryTable";
 import { Modal } from "../ui/modal";
+
+interface DeliveryRecord {
+  id: number;
+  payment_id: string;
+  keyword_upload: string;
+  created_at: string;
+}
 
 interface UserPaymentDetailProps {
   userName: string;
@@ -11,7 +18,7 @@ interface UserPaymentDetailProps {
   onStatusUpdate?: (newStatus: string) => void;
 }
 
-export default function UserPaymentDetail({ userName, payment, onStatusUpdate }: UserPaymentDetailProps) {
+export default function UserPaymentDetail({ payment, onStatusUpdate }: UserPaymentDetailProps) {
   const [status, setStatus] = useState(payment.payment_status || "PENDING");
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -21,27 +28,27 @@ export default function UserPaymentDetail({ userName, payment, onStatusUpdate }:
   // Keyword Delivery State
   const [keywordFile, setKeywordFile] = useState<File | null>(null);
   const [isDelivering, setIsDelivering] = useState(false);
-  const [deliveryRecords, setDeliveryRecords] = useState<any[]>([]);
+  const [deliveryRecords, setDeliveryRecords] = useState<DeliveryRecord[]>([]);
   const [isLoadingDeliveries, setIsLoadingDeliveries] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetchDeliveryHistory();
-  }, [payment.id]);
-
-  const fetchDeliveryHistory = async () => {
+  const fetchDeliveryHistory = useCallback(async () => {
     try {
       const response = await fetch(`/api/deliver-keywords?payment_id=${payment.id}`);
       const result = await response.json();
       if (result.success) {
         setDeliveryRecords(result.data);
       }
-    } catch (err) {
+    } catch {
       console.error("Failed to fetch delivery history");
     } finally {
       setIsLoadingDeliveries(false);
     }
-  };
+  }, [payment.id]);
+
+  useEffect(() => {
+    fetchDeliveryHistory();
+  }, [fetchDeliveryHistory]);
 
   const handleDownloadPDF = async () => {
     setIsGeneratingPDF(true);
@@ -117,7 +124,7 @@ export default function UserPaymentDetail({ userName, payment, onStatusUpdate }:
       } else {
         alert("Error: " + result.error);
       }
-    } catch (err) {
+    } catch {
       alert("Failed to update status");
     } finally {
       setIsUpdating(false);
@@ -149,7 +156,7 @@ export default function UserPaymentDetail({ userName, payment, onStatusUpdate }:
         }
       };
       reader.readAsDataURL(keywordFile);
-    } catch (err) {
+    } catch {
       alert("Failed to upload keywords");
     } finally {
       setIsDelivering(false);
@@ -171,7 +178,7 @@ export default function UserPaymentDetail({ userName, payment, onStatusUpdate }:
       } else {
         alert("Error: " + result.error);
       }
-    } catch (err) {
+    } catch {
       alert("Failed to delete keyword delivery");
     } finally {
       setDeletingId(null);
@@ -381,7 +388,7 @@ export default function UserPaymentDetail({ userName, payment, onStatusUpdate }:
                 <div className="relative group/img overflow-hidden rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 aspect-video flex items-center justify-center cursor-zoom-in" onClick={() => setIsLightboxOpen(true)}>
                   <img 
                     src={payment.screenshot_url} 
-                    alt="Proof" 
+                    alt="Payment Proof" 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -403,7 +410,11 @@ export default function UserPaymentDetail({ userName, payment, onStatusUpdate }:
       >
          <div className="flex flex-col items-center gap-6">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-h-[80vh]">
-              <img src={payment.screenshot_url} className="max-w-full max-h-full object-contain" />
+              <img 
+                src={payment.screenshot_url} 
+                alt="Payment Proof Full View"
+                className="max-w-full max-h-full object-contain" 
+              />
             </div>
             <button 
                onClick={() => setIsLightboxOpen(false)}

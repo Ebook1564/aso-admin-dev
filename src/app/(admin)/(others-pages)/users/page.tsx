@@ -43,8 +43,8 @@ export default function AllUsersPage() {
         } else {
           setError(json.error || "API returned error");
         }
-      } catch (e) {
-        setError("Failed to fetch users");
+      } catch {
+        setError("An error occurred while fetching data");
       } finally {
         setLoading(false);
       }
@@ -128,7 +128,9 @@ export default function AllUsersPage() {
             className="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-white/[0.03] transition-colors"
             aria-label="Go back"
           >
-            <ChevronLeftIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <span className="w-5 h-5 text-gray-600 dark:text-gray-400">
+              <ChevronLeftIcon />
+            </span>
           </button>
           <div>
             <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
@@ -281,7 +283,9 @@ export default function AllUsersPage() {
                           aria-label="View user"
                           title="View user details"
                         >
-                          <EyeIcon className="w-4 h-4" />
+                          <span className="w-4 h-4">
+                            <EyeIcon />
+                          </span>
                         </button>
                         <button
                           onClick={(e) => handleEditClick(e, user.id)}
@@ -289,7 +293,9 @@ export default function AllUsersPage() {
                           aria-label="Edit user"
                           title="Edit user details"
                         >
-                          <PencilIcon className="w-4 h-4" />
+                          <span className="w-4 h-4">
+                            <PencilIcon />
+                          </span>
                         </button>
                       </div>
                     </TableCell>

@@ -1,24 +1,19 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
   LayoutDashboard,
   Calendar,
   History,
-  FileUp,
-  HelpCircle,
-  Menu,
   ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import SidebarItem from "@/components/sidebar/SidebarItem";
 
 type NavItem = {
   name: string;
-  icon: any;
+  icon: React.ElementType;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
@@ -45,7 +40,6 @@ const mainMenuItems: NavItem[] = [
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered, toggleSidebar } = useSidebar();
-  const pathname = usePathname();
 
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
 

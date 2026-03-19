@@ -118,7 +118,6 @@ export default function PaymentHistoryTable() {
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(true);
   const [detailLoading, setDetailLoading] = useState(false);
-  const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedPayment, setSelectedPayment] = useState<PaymentRecord | null>(null);
@@ -126,7 +125,7 @@ export default function PaymentHistoryTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // Debounce search query
   useEffect(() => {
@@ -153,10 +152,10 @@ export default function PaymentHistoryTable() {
         setData(result.data);
         setTotalRecords(result.total);
       } else {
-        setError(result.error || "Failed to fetch payment history");
+        console.error(result.error || "Failed to fetch payment history");
       }
     } catch (err) {
-      setError("An error occurred while fetching payment data");
+      console.error("An error occurred while fetching payment data");
     } finally {
       setLoading(false);
     }
@@ -180,7 +179,7 @@ export default function PaymentHistoryTable() {
       } else {
         alert("Failed to load details: " + result.error);
       }
-    } catch (err) {
+    } catch (error) {
       alert("Error loading transaction data");
     } finally {
       setDetailLoading(false);

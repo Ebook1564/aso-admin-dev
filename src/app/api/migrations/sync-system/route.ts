@@ -52,13 +52,15 @@ export async function POST() {
       try {
         await pool.query(statement);
         results.push({ statement: statement.substring(0, 50) + "...", status: "success" });
-      } catch (err: any) {
-        results.push({ statement: statement.substring(0, 50) + "...", status: "error", message: err.message });
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        results.push({ statement: statement.substring(0, 50) + "...", status: "error", message: errorMessage });
       }
     }
 
     return NextResponse.json({ success: true, results });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "System synchronization failed";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

@@ -8,13 +8,12 @@ import {
     TableHeader,
     TableRow,
 } from "../ui/table";
-import { EyeIcon, PencilIcon, TrashBinIcon, PlusIcon, ChevronDownIcon } from "@/icons";
+import { EyeIcon, PencilIcon, TrashBinIcon, PlusIcon } from "@/icons";
 import { Modal } from "../ui/modal";
 import { useModal } from "@/hooks/useModal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
-import Select from "../form/Select";
 import Pagination from "./Pagination";
 
 const ITEMS_PER_PAGE = 10;
@@ -42,7 +41,6 @@ const initialFormData: Partial<User> = {
 export default function UserDataTable() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
 
     // Modals
     const addModal = useModal();
@@ -66,10 +64,10 @@ export default function UserDataTable() {
             if (data.success) {
                 setUsers(data.data);
             } else {
-                setError(data.error || "Failed to fetch users");
+                console.error(data.error || "Failed to fetch users");
             }
-        } catch (err) {
-            setError("An error occurred while fetching users");
+        } catch {
+            console.error("An error occurred while fetching users");
         } finally {
             setLoading(false);
         }
@@ -127,10 +125,10 @@ export default function UserDataTable() {
         addModal.openModal();
     };
 
-    const handleInputChange = (field: keyof User, value: any) => {
+    const handleInputChange = (field: keyof User, value: unknown) => {
         // Parse revenue fields to numbers
         if (["today_revenue", "yesterday_revenue", "last_7d_revenue", "this_month_revenue", "last_28d_revenue"].includes(field)) {
-            const numValue = value === "" ? 0 : parseFloat(value);
+            const numValue = value === "" ? 0 : parseFloat(value as string);
             setFormData((prev) => ({ ...prev, [field]: numValue }));
         } else {
             setFormData((prev) => ({ ...prev, [field]: value }));
@@ -235,7 +233,7 @@ export default function UserDataTable() {
                             onClick={handleAddClick}
                             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md transition-all active:scale-95"
                         >
-                            <PlusIcon className="w-4 h-4" />
+                            <span className="w-4 h-4"><PlusIcon /></span>
                             Add Entry
                         </Button>
                     </div>
@@ -268,7 +266,7 @@ export default function UserDataTable() {
                         </TableHeader>
 
                         <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-                            {paginatedUsers.map((user, index) => (
+                            {paginatedUsers.map((user) => (
                                 <TableRow
                                     key={user.id}
                                     className="cursor-pointer hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-all duration-200"
@@ -303,21 +301,21 @@ export default function UserDataTable() {
                                                 className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
                                                 title="View details"
                                             >
-                                                <EyeIcon className="w-4 h-4" />
+                                                <span className="w-4 h-4"><EyeIcon /></span>
                                             </button>
                                             <button
                                                 onClick={(e) => handleEditClick(e, user)}
                                                 className="p-2 rounded-lg text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20 transition-colors"
                                                 title="Edit record"
                                             >
-                                                <PencilIcon className="w-4 h-4" />
+                                                <span className="w-4 h-4"><PencilIcon /></span>
                                             </button>
                                             <button
                                                 onClick={(e) => handleDeleteClick(e, user)}
                                                 className="p-2 rounded-lg text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
                                                 title="Delete record"
                                             >
-                                                <TrashBinIcon className="w-4 h-4" />
+                                                <span className="w-4 h-4"><TrashBinIcon /></span>
                                             </button>
                                         </div>
                                     </TableCell>
@@ -370,11 +368,11 @@ export default function UserDataTable() {
                                 <p className="mt-1 text-lg font-medium text-gray-800 dark:text-gray-200">{viewUser.useremail}</p>
                             </div>
                             <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20">
-                                <Label className="text-emerald-700 dark:text-emerald-400">Today's Revenue</Label>
+                                <Label className="text-emerald-700 dark:text-emerald-400">Today&apos;s Revenue</Label>
                                 <p className="mt-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(viewUser.today_revenue)}</p>
                             </div>
                             <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-                                <Label>Yesterday's Revenue</Label>
+                                <Label>Yesterday&apos;s Revenue</Label>
                                 <p className="mt-1 text-2xl font-bold text-gray-800 dark:text-white">{formatCurrency(viewUser.yesterday_revenue)}</p>
                             </div>
                             <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20">
@@ -443,7 +441,7 @@ export default function UserDataTable() {
                         </div>
 
                         <div>
-                            <Label htmlFor="today_revenue">Today's Revenue</Label>
+                            <Label htmlFor="today_revenue">Today&apos;s Revenue</Label>
                             <Input
                                 type="number"
                                 step={0.001}
@@ -455,7 +453,7 @@ export default function UserDataTable() {
                         </div>
 
                         <div>
-                            <Label htmlFor="yesterday_revenue">Yesterday's Revenue</Label>
+                            <Label htmlFor="yesterday_revenue">Yesterday&apos;s Revenue</Label>
                             <Input
                                 type="number"
                                 step={0.001}
@@ -522,7 +520,7 @@ export default function UserDataTable() {
             >
                 <div className="text-center">
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/15 mb-4">
-                        <TrashBinIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                        <span className="h-6 w-6 text-red-600 dark:text-red-400"><TrashBinIcon /></span>
                     </div>
                     <h4 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">
                         Delete Revenue Entry

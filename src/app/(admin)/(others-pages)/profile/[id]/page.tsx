@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeftIcon, EyeIcon, PencilIcon, CheckCircleIcon, TimeIcon } from "@/icons";
+import { ChevronLeftIcon, PencilIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
 import Badge from "@/components/ui/badge/Badge";
 import Select from "@/components/form/Select";
@@ -202,7 +202,7 @@ export default function SettlementDetailPage() {
         <div className="text-center">
           <p className="text-red-500 dark:text-red-400 mb-4">{error || "Settlement not found"}</p>
           <Button onClick={() => router.back()} className="inline-flex items-center gap-2">
-            <ChevronLeftIcon className="w-4 h-4" />
+            <span className="w-4 h-4"><ChevronLeftIcon /></span>
             Go Back
           </Button>
         </div>
@@ -217,10 +217,12 @@ export default function SettlementDetailPage() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
-            className="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-white/[0.03] transition-colors"
+            className="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-white/[0.03] transition-colors flex items-center justify-center"
             aria-label="Go back"
           >
-            <ChevronLeftIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <span className="w-5 h-5 text-gray-600 dark:text-gray-400">
+              <ChevronLeftIcon />
+            </span>
           </button>
           <div>
             <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
@@ -236,7 +238,7 @@ export default function SettlementDetailPage() {
             onClick={() => setIsEditing(true)}
             className="inline-flex items-center gap-2"
           >
-            <PencilIcon className="w-4 h-4" />
+            <span className="w-4 h-4"><PencilIcon /></span>
             Edit Settlement
           </Button>
         )}
@@ -306,8 +308,8 @@ export default function SettlementDetailPage() {
                     onChange={handleStatusChange}
                     className="text-sm"
                   />
-                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                    <ChevronDownIcon className="w-4 h-4" />
+                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400 w-4 h-4">
+                    <ChevronDownIcon />
                   </span>
                 </div>
               ) : (

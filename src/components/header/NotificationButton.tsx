@@ -51,7 +51,7 @@ const NotificationButton: React.FC = () => {
                     New project assignment
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
-                    You have been assigned to the new "Analytics Dashboard" project.
+                    You have been assigned to the new &quot;Analytics Dashboard&quot; project.
                   </p>
                   <span className="text-[10px] text-gray-400 font-medium mt-1">2 mins ago</span>
                 </div>

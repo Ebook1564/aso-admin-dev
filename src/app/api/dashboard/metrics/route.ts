@@ -30,7 +30,7 @@ export async function GET() {
     const totalLoginCount = parseInt(totalLoginResult.rows[0]?.count || '0', 10);
 
     // 3. Monthly Revenue - Placeholder
-    let monthlyRevenue = 0;
+    const monthlyRevenue = 0;
 
     // 4. Active Users - Same as Today Login
     const activeUsersCount = todayLoginCount;
@@ -47,12 +47,13 @@ export async function GET() {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("API /api/dashboard/metrics GET error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to fetch dashboard metrics";
     return NextResponse.json(
       {
         success: false,
-        error: error?.message || "Failed to fetch dashboard metrics",
+        error: errorMessage,
       },
       { status: 500 }
     );

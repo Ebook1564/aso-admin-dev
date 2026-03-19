@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Download, User, Hash, DollarSign, Package, CheckCircle2, Clock, XCircle, Search, ExternalLink } from "lucide-react";
+import { Download, User, Hash, DollarSign, Package, CheckCircle2, Clock, XCircle, ExternalLink } from "lucide-react";
 
 interface DeliveryRecord {
   id: number;

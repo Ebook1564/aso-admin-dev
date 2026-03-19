@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components
 import { Search, User, Copy, Eye, EyeOff, RefreshCcw, Check, ShieldAlert } from "lucide-react";
 
 export default function CreatedUserDataTable() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Record<string, unknown>[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -26,7 +26,7 @@ export default function CreatedUserDataTable() {
       } else {
         setError(result.error || "Failed to fetch data");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred while fetching user data");
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ export default function CreatedUserDataTable() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const formatValue = (col: string, value: any, idx: number) => {
+  const formatValue = (col: string, value: unknown, idx: number) => {
     if (value === null || value === undefined) return "-";
 
     const valStr = String(value);

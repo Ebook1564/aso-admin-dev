@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
-import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
-import ActiveUsersCard from "@/components/ecommerce/ActiveUsersCard";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
 import KeywordReports from "@/components/user/KeywordReports";
 import CreatedUserDataTable from "@/components/tables/CreatedUserDataTable";
-// import DemographicCard from "@/components/ecommerce/DemographicCard";
 
 export const metadata: Metadata = {
   title:
