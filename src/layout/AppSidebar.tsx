@@ -62,7 +62,7 @@ const AppSidebar: React.FC = () => {
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20 shrink-0">
             <Image
-              src="/tailadmin-nextjs/images/logo/logo-icon.svg"
+              src="/images/logo/logo-icon.svg"
               alt="Logo"
               width={24}
               height={24}

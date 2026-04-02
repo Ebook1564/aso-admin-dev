@@ -25,7 +25,7 @@ export default function AuthLayout({
                   <Image
                     width={231}
                     height={48}
-                    src="/tailadmin-nextjs/images/logo/auth-logo.svg"
+                    src="/images/logo/auth-logo.svg"
                     alt="Logo"
                   />
                 </Link>
